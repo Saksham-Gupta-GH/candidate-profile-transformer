@@ -4,10 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameDisplay = document.getElementById('fileName');
     const dropZone = document.getElementById('dropZone');
     
-    const useConfigToggle = document.getElementById('useConfigToggle');
-    const configGroup = document.getElementById('configGroup');
-    const configJson = document.getElementById('configJson');
-    
     const submitBtn = document.getElementById('submitBtn');
     const btnText = document.querySelector('.btn-text');
     const loader = document.getElementById('loader');
@@ -16,14 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const jsonOutput = document.getElementById('jsonOutput');
     const copyBtn = document.getElementById('copyBtn');
 
+    // Field configuration mapping
+    const fieldMapping = {
+        'full_name': { path: 'full_name', type: 'string', required: true },
+        'primary_email': { path: 'primary_email', from: 'emails[0]', type: 'string', required: true },
+        'phone': { path: 'phone', from: 'phones[0]', type: 'string', normalize: 'E164' },
+        'location': { path: 'location', from: 'location.country', type: 'string' },
+        'skills': { path: 'skills', from: 'skills[*].name', type: 'string[]', normalize: 'canonical' },
+        'experience': { path: 'experience', type: 'array' },
+        'links': { path: 'links', type: 'object' },
+        'headline': { path: 'headline', type: 'string' }
+    };
+
     // Handle File Input Change
     csvFileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             fileNameDisplay.textContent = e.target.files[0].name;
             fileNameDisplay.style.color = 'var(--text-main)';
+            dropZone.style.borderColor = 'var(--text-main)';
+            dropZone.style.backgroundColor = '#F7F7F7';
         } else {
-            fileNameDisplay.textContent = 'Drag & drop or click to upload CSV';
-            fileNameDisplay.style.color = 'var(--text-muted)';
+            fileNameDisplay.innerHTML = 'Drag your CSV here, or <span class="text-link">browse</span>';
+            fileNameDisplay.style.color = '';
+            dropZone.style.borderColor = '';
+            dropZone.style.backgroundColor = '';
         }
     });
 
@@ -43,19 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (e.dataTransfer.files.length > 0) {
             csvFileInput.files = e.dataTransfer.files;
-            // Trigger change event
             const event = new Event('change');
             csvFileInput.dispatchEvent(event);
-        }
-    });
-
-    // Handle Config Toggle
-    useConfigToggle.addEventListener('change', (e) => {
-        if (e.target.checked) {
-            configGroup.style.display = 'block';
-        } else {
-            configGroup.style.display = 'none';
-            configJson.value = '';
         }
     });
 
@@ -72,20 +73,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Validate JSON if provided
-        if (useConfigToggle.checked) {
-            try {
-                const configVal = formData.get('configJson');
-                if (configVal.trim() !== '') {
-                    JSON.parse(configVal);
-                }
-            } catch (err) {
-                alert('Invalid JSON in projection config.');
-                return;
+        // Build Config JSON from Checkboxes
+        const checkboxes = document.querySelectorAll('input[name="configField"]:checked');
+        const selectedFields = [];
+        
+        checkboxes.forEach(cb => {
+            if (fieldMapping[cb.value]) {
+                selectedFields.push(fieldMapping[cb.value]);
             }
-        } else {
-            formData.delete('configJson');
-        }
+        });
+
+        const configObject = {
+            fields: selectedFields,
+            include_confidence: true,
+            on_missing: 'null'
+        };
+
+        formData.set('config', JSON.stringify(configObject));
 
         // UI Loading State
         submitBtn.disabled = true;
@@ -94,23 +98,26 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContainer.style.display = 'none';
 
         try {
-            // Using a relative path so it works seamlessly on Vercel
             const response = await fetch('/api/transform', {
                 method: 'POST',
                 body: formData
             });
 
-            const data = await response.json();
+            // Handle potential HTML error pages from server
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || 'An error occurred during transformation');
+                }
 
-            if (!response.ok) {
-                throw new Error(data.detail || 'An error occurred during transformation');
+                jsonOutput.textContent = JSON.stringify(data.profiles, null, 2);
+                resultContainer.style.display = 'block';
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                throw new Error("Server returned a non-JSON response. Ensure Vercel routing is configured correctly.");
             }
-
-            jsonOutput.textContent = JSON.stringify(data.profiles, null, 2);
-            resultContainer.style.display = 'block';
-            
-            // Scroll to results
-            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         } catch (error) {
             alert(`Error: ${error.message}`);
