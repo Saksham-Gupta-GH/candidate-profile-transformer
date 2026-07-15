@@ -25,29 +25,29 @@ from src.schema import CanonicalProfile
 
 @app.post("/api/transform")
 async def transform(
-    csv_file: UploadFile = File(None),
-    github_url: str = Form(None),
+    csvFile: UploadFile = File(None),
+    githubUrl: str = Form(None),
     config: str = Form(None)
 ):
-    if not csv_file and not github_url:
+    if not csvFile and not githubUrl:
         raise HTTPException(status_code=400, detail="Must provide at least one source (CSV or GitHub URL)")
     
     all_profiles = []
     
-    if csv_file:
+    if csvFile:
         # Save uploaded file to a temporary file
         fd, temp_path = tempfile.mkstemp(suffix=".csv")
         try:
             with os.fdopen(fd, 'wb') as f:
-                f.write(await csv_file.read())
+                f.write(await csvFile.read())
             extractor = CSVExtractor()
             all_profiles.extend(extractor.extract(temp_path))
         finally:
             os.remove(temp_path)
             
-    if github_url:
+    if githubUrl:
         extractor = GitHubExtractor()
-        all_profiles.extend(extractor.extract(github_url))
+        all_profiles.extend(extractor.extract(githubUrl))
         
     merger = MergeEngine()
     merged_profiles = merger.merge(all_profiles)
