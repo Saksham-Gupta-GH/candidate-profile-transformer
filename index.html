@@ -31,6 +31,10 @@
                 <h1>Transform candidate data instantly</h1>
                 <p>Merge messy recruiter CSVs and GitHub profiles into clean, structured JSON.</p>
                 
+                <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem;">
+                    <a href="app.html" class="primary-btn" style="display: inline-block; text-decoration: none; padding: 1rem 2.5rem; font-size: 1.1rem;">Try it Now</a>
+                </div>
+                
                 <div class="about-section">
                     <div class="about-card">
                         <div class="about-icon">
@@ -54,105 +58,7 @@
                         <p>Get perfectly structured profiles ready for API integrations or custom dashboards.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="card">
-                <form id="transformForm">
-                    
-                    <div class="section-title">
-                        1. Upload Recruiter Data
-                        <span class="helper-text">(Don't have one? <a href="/sample.csv" download class="text-link">Download sample.csv</a>)</span>
                     </div>
-                    <div class="form-group">
-                        <div class="file-upload-wrapper" id="dropZone">
-                            <input type="file" id="csvFile" name="csvFile" accept=".csv" />
-                            <div class="upload-icon">
-                                <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            </div>
-                            <span id="fileName">Drag your CSV here, or <span class="text-link">browse</span></span>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="section-title">2. Add GitHub Profile (Optional)</div>
-                    <div class="form-group">
-                        <input type="url" id="githubUrl" name="githubUrl" placeholder="https://github.com/username" autocomplete="off">
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="section-title">3. Configure Output Fields</div>
-                    <p class="config-desc">Select which fields should be included in the final canonical profile.</p>
-                    
-                    <div class="config-grid">
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="full_name" checked disabled>
-                            <span class="checkmark"></span>
-                            Full Name (Required)
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="primary_email" checked disabled>
-                            <span class="checkmark"></span>
-                            Primary Email (Required)
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="phone" checked>
-                            <span class="checkmark"></span>
-                            Phone Number
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="location" checked>
-                            <span class="checkmark"></span>
-                            Location
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="skills" checked>
-                            <span class="checkmark"></span>
-                            Skills
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="experience" checked>
-                            <span class="checkmark"></span>
-                            Experience
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="links" checked>
-                            <span class="checkmark"></span>
-                            Social Links
-                        </label>
-                        <label class="checkbox-container">
-                            <input type="checkbox" name="configField" value="headline" checked>
-                            <span class="checkmark"></span>
-                            Headline
-                        </label>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="primary-btn">
-                        <span class="btn-text">Transform Profile</span>
-                        <div class="loader" id="loader" style="display: none;"></div>
-                    </button>
-                </form>
-            </div>
-
-            <div id="resultContainer" class="card result-container" style="display: none;">
-                <div class="result-header">
-                    <h2>Transformed Profiles</h2>
-                    <div class="view-toggles">
-                        <button id="viewVisualBtn" class="toggle-btn active">Visual</button>
-                        <button id="viewJsonBtn" class="toggle-btn">JSON</button>
-                    </div>
-                </div>
-                
-                <div id="visualView" class="visual-view">
-                    <!-- Candidate cards will be injected here -->
-                </div>
-
-                <div id="jsonView" class="json-view" style="display: none;">
-                    <div class="json-actions">
-                        <button id="copyBtn" class="secondary-btn">Copy JSON</button>
-                    </div>
-                    <pre><code id="jsonOutput"></code></pre>
                 </div>
             </div>
         </main>

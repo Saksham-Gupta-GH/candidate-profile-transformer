@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'headline': { path: 'headline', type: 'string' }
     };
 
+    // If form is not on this page, stop here (e.g. on index.html)
+    if (!form) return;
+
     // Handle File Input Change
     csvFileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
