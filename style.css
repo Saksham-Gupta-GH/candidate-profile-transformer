@@ -1,15 +1,15 @@
 :root {
-    --bg-light: #F8FAFC;
+    --bg-light: #FAFAF9;
     --card-bg: #FFFFFF;
-    --border-color: #E2E8F0;
-    --text-main: #0F172A;
-    --text-muted: #64748B;
-    --accent: #2563EB;
-    --accent-hover: #1D4ED8;
-    --focus-ring: rgba(37, 99, 235, 0.3);
-    --radius-lg: 8px;
-    --radius-md: 6px;
-    --radius-sm: 4px;
+    --border-color: #E7E5E4;
+    --text-main: #292524;
+    --text-muted: #57534E;
+    --accent: #6366F1;
+    --accent-hover: #4F46E5;
+    --focus-ring: rgba(99, 102, 241, 0.3);
+    --radius-lg: 12px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
 }
 
 * {
@@ -91,7 +91,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 2.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
     margin-bottom: 2rem;
 }
 
@@ -518,7 +518,7 @@ pre {
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     border-radius: var(--radius-md);
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
 }
 .about-icon {
     display: inline-flex;
@@ -526,7 +526,7 @@ pre {
     justify-content: center;
     width: 48px;
     height: 48px;
-    background: #F1F5F9;
+    background: #EEF2FF;
     color: var(--accent);
     border-radius: 12px;
     margin-bottom: 1rem;
