@@ -104,10 +104,23 @@
 
             <div id="resultContainer" class="card result-container" style="display: none;">
                 <div class="result-header">
-                    <h2>Generated JSON</h2>
-                    <button id="copyBtn" class="secondary-btn">Copy Output</button>
+                    <h2>Transformed Profiles</h2>
+                    <div class="view-toggles">
+                        <button id="viewVisualBtn" class="toggle-btn active">Visual</button>
+                        <button id="viewJsonBtn" class="toggle-btn">JSON</button>
+                    </div>
                 </div>
-                <pre><code id="jsonOutput"></code></pre>
+                
+                <div id="visualView" class="visual-view">
+                    <!-- Candidate cards will be injected here -->
+                </div>
+
+                <div id="jsonView" class="json-view" style="display: none;">
+                    <div class="json-actions">
+                        <button id="copyBtn" class="secondary-btn">Copy JSON</button>
+                    </div>
+                    <pre><code id="jsonOutput"></code></pre>
+                </div>
             </div>
         </main>
     </div>
